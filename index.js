@@ -6,19 +6,7 @@ const startNetwork = true;
 const startTraining = true;
 const startServer = false;
 
-if (startServer) {
-    web.run();
-}
-data.init('./datasets/data2.txt');
-const inputVector = data.getDataSetVectorInt();
-//const inputVector = data.getDataWords();
-const symbolTableLength = data.getSymbolTable().length;
-
-console.log('Макс длина слова: ', data.getMaxWordLength());
-console.log(data.getDataWords());
-
-console.log('Длина таблицы символов : ', data.getSymbolTable().length);
-console.log('Длина тренировочного вектора : ', data.getDataSetVector().length);
+if (startServer) web.run();
 
 //
 // НАСТРОЙКИ
@@ -36,6 +24,17 @@ const generateLength = 1000;
 //
 //
 //
+
+data.init('./datasets/data2.txt');
+const inputVector = data.getDataSetVectorInt();
+//const inputVector = data.getDataWords();
+const symbolTableLength = data.getSymbolTable().length;
+
+//console.log('Макс длина слова: ', data.getMaxWordLength());
+//console.log(data.getDataWords());
+console.log('Длина таблицы символов : ', symbolTableLength);
+console.log('Длина тренировочного вектора : ', inputVector.length);
+//console.log('Тренировочного вектор : ', inputVector);
 
 if (startNetwork) {
     lstm.create([layerSize1, layerSize2, layerSize3], sequenceLength, symbolTableLength, wordLength, learningRate);

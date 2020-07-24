@@ -9,6 +9,7 @@ let Lstm = {
     yData: null,
     model: tf.sequential(),
 
+    // ИНИЦИАЛИЗАЦИЯ СЕТИ И СЛОЕВ
     create(layers, sequenceLength, symbolTableLength, wordLength, learningRate) {
         this.sequenceLength = sequenceLength;
         this.symbolTableLength = symbolTableLength;
@@ -37,6 +38,7 @@ let Lstm = {
         return this.model;
     },
 
+    // ОБРАБОТКА ДАТА СЕТА
     setData(inputVector) {
         let dataSets = [];
         let dataLabels = [];
@@ -60,11 +62,11 @@ let Lstm = {
             dataLabels[i][inputVector[this.sequenceLength + i]] = 1;
         }
 
-        console.log('Кол-во семплов: ', dataSets.length);
-        console.log('Кол-во меток: ', dataLabels.length);
+        //console.log('Кол-во семплов: ', dataSets.length);
+        //console.log('Кол-во меток: ', dataLabels.length);
 
-        console.log('Семплы: ', dataSets);
-        console.log('Метки: ', dataLabels);
+        //console.log('Семплы: ', dataSets);
+        //console.log('Метки: ', dataLabels);
 
         let xbuf = [];
         let ybuf = [];
@@ -81,6 +83,7 @@ let Lstm = {
         this.yData = tf.tensor2d(ybuf);
     },
 
+    // ПОЛУЧЕНИЯ РАНДОМНОГО ПЕРВОГО ВХОДА
     randomData() {
         let randomData = [];
         for (let i = 0; i < this.sequenceLength-1; i++) {
@@ -90,6 +93,7 @@ let Lstm = {
         return randomData;
     },
 
+    // ТРЕНИРОВКА СЕТИ
     train(epochsCount, batchSize, verbose, onTrained) {
         //console.log(tf.layers.Layer.getWeights());
         this.model.fit(this.xData, this.yData, {
@@ -110,6 +114,7 @@ let Lstm = {
         });
     },
 
+    // ПОЛУЧЕНИЕ ОТВЕТА СЕТИ
     predict(input) {
         let prediction = this.model.predict(tf.tensor3d([input]));
         return prediction.dataSync();

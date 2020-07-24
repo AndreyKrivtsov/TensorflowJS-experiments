@@ -44,7 +44,7 @@ let Data = {
     getDataSetVectorInt() {
         if (!this.dataSetVectorInt.length) {
             for (let i = 0; i < this.getDataSetVector().length; i++) {
-                this.dataSetVectorInt.push(this.charToInt(this.getDataSetVector[i]));
+                this.dataSetVectorInt.push(this.charToInt(this.getDataSetVector()[i]));
             }
         }
         return this.dataSetVectorInt;
