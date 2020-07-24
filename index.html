@@ -1,0 +1,40 @@
+<html>
+<head>
+
+</head>
+<body>
+
+<button class="button">Play</button>
+
+<script lang="javascript">
+    let audioContext;
+    let oscillator;
+    let playing = false;
+    window.onload = function() {
+        audioContext = new AudioContext();
+        oscillator = audioContext.createOscillator();
+        oscillator.frequency.value = 440;
+        oscillator.connect(audioContext.destination);
+        oscillator.start(0);
+    }
+
+    let button = document.querySelector('.button');
+    button.addEventListener('click', function() {
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
+        if (!playing) {
+            oscillator.connect(audioContext.destination);
+            button.textContent = 'Stop';
+        }
+        else {
+            oscillator.disconnect(audioContext.destination);
+            oscillator.frequency.value += 440;
+            button.textContent = 'Play';
+        }
+        playing = !playing;
+    });
+</script>
+</body>
+</html>
