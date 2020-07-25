@@ -11,14 +11,14 @@ if (startServer) web.run();
 //
 // НАСТРОЙКИ
 //
-const sequenceLength = 50;
-const layerSize1 = 512;
+const sequenceLength = 60;
+const layerSize1 = 128;
 const layerSize2 = 512;
 const layerSize3 = 256;
 const wordLength = 1; //data.getMaxWordLength();
 const learningRate = 0.001; // default: 0.001
 const epochsCount = 100;
-const batchSize = 256; // default: 32
+const batchSize = 512 + 256 + 128; // default: 32
 const verbose = 1; // default: 1
 const generateLength = 1000;
 const minLoss = 0.1;

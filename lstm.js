@@ -16,7 +16,7 @@ let Lstm = {
         for (let i = 0; i < layers.length; i++) {
             if (i === 0) {
                 this.model.add(
-                    tf.layers.lstm({
+                    tf.layers.gru({
                         units: layers[i],
                         recurrentInitializer: 'glorotNormal',
                         returnSequences: layers.length > 1,
