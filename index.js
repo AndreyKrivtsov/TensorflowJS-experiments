@@ -12,9 +12,9 @@ if (startServer) web.run();
 // НАСТРОЙКИ
 //
 const sequenceLength = 60;
-const layerSize1 = 128;
-const layerSize2 = 512;
-const layerSize3 = 256;
+const layerSize1 = 64;
+const layerSize2 = 32;
+const layerSize3 = 64;
 const wordLength = 1; //data.getMaxWordLength();
 const learningRate = 0.001; // default: 0.001
 const epochsCount = 100;
@@ -41,7 +41,7 @@ if (startNetwork) {
     let lastLoss = 100;
     let counter = 0;
 
-    lstm.create([layerSize1], sequenceLength, symbolTableLength, wordLength, learningRate);
+    lstm.create([layerSize1, layerSize2], sequenceLength, symbolTableLength, wordLength, learningRate);
     lstm.setData(inputVector);
 
     if (startTraining) {
