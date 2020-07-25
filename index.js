@@ -11,21 +11,22 @@ if (startServer) web.run();
 //
 // НАСТРОЙКИ
 //
-const sequenceLength = 10;
-const layerSize1 = 256;
-const layerSize2 = 128;
-const layerSize3 = 64;
+const sequenceLength = 50;
+const layerSize1 = 512;
+const layerSize2 = 512;
+const layerSize3 = 256;
 const wordLength = 1; //data.getMaxWordLength();
-const learningRate = 0.007; // default: 0.001
+const learningRate = 0.001; // default: 0.001
 const epochsCount = 100;
-const batchSize = 1024; // default: 32
+const batchSize = 256; // default: 32
 const verbose = 1; // default: 1
 const generateLength = 1000;
+const minLoss = 0.1;
 //
 //
 //
 
-data.init('./datasets/data2.txt');
+data.init('./datasets/code.txt');
 const inputVector = data.getDataSetVectorInt();
 //const inputVector = data.getDataWords();
 const symbolTableLength = data.getSymbolTable().length;
@@ -37,12 +38,28 @@ console.log('Длина тренировочного вектора : ', inputVe
 //console.log('Тренировочного вектор : ', inputVector);
 
 if (startNetwork) {
-    lstm.create([layerSize1, layerSize2, layerSize3], sequenceLength, symbolTableLength, wordLength, learningRate);
+    let lastLoss = 100;
+    let counter = 0;
+
+    lstm.create([layerSize1], sequenceLength, symbolTableLength, wordLength, learningRate);
     lstm.setData(inputVector);
 
     if (startTraining) {
         let startTime = Date.now();
-        lstm.train(epochsCount, batchSize, verbose, () => {
+        lstm.train(epochsCount, batchSize, verbose,
+
+            (epoch, logs, model) => {
+                logs.loss > lastLoss ? counter++ : counter--;
+                counter < 0 ? counter = 0 : null;
+                lastLoss = logs.loss;
+
+                if (Number(logs.loss) < minLoss || counter > 3) {
+                    console.log('Stopped training by loss.');
+                    model.stopTraining = true;
+                }
+            },
+
+            () => {
             let endTime = Date.now();
             console.log('Время обучения: ', Math.ceil((endTime - startTime) / 1000 / 60));
             console.log('Генерация текста...');

@@ -94,7 +94,7 @@ let Lstm = {
     },
 
     // ТРЕНИРОВКА СЕТИ
-    train(epochsCount, batchSize, verbose, onTrained) {
+    train(epochsCount, batchSize, verbose, onEpochEnd, onTrained) {
         //console.log(tf.layers.Layer.getWeights());
         this.model.fit(this.xData, this.yData, {
             epochs: epochsCount,
@@ -105,7 +105,7 @@ let Lstm = {
                     //console.log('Batch ', batchSize);
                 },
                 onEpochEnd: async (epoch, logs) => {
-                    //console.log(epoch + 1, logs.loss);
+                    onEpochEnd(epoch, logs, this.model);
                 },
                 onTrainEnd: async () => {
                     onTrained();

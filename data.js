@@ -80,7 +80,7 @@ let Data = {
             let maxLength = 0;
             let word = '';
             for (let i = 0; i < this.dataSetRaw.length; i++) {
-                if (!this.isReturn(this.dataSetRaw.charAt(i))) {
+                //if (!this.isReturn(this.dataSetRaw.charAt(i))) {
                     if (this.dataSetRaw.charAt(i) === ' ') {
                         maxLength < word.length ? maxLength = word.length : null
                         wordIterator++;
@@ -89,7 +89,7 @@ let Data = {
                     else {
                         word += this.dataSetRaw.charAt(i);
                     }
-                }
+                //}
             }
             this.maxWordLength = maxLength;
         }
