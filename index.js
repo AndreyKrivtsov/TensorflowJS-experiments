@@ -1,30 +1,31 @@
 const web = require('./web.js');
 const data = require('./data.js');
 const lstm = require('./lstm.js');
+const fs = require("fs");
 
 const startNetwork = true;
 const startTraining = true;
-const startServer = false;
+const startServer = true;
 
 if (startServer) web.run();
 
 //
 // НАСТРОЙКИ
 //
-const sequenceLength = 30;
-const layers = [1,1,1,1,1];
+const sequenceLength = 20;
+const layers = [64,64,32,32];
 const wordLength = 1; //data.getMaxWordLength();
-const learningRate = 0.01; // default: 0.001
-const epochsCount = 300;
-const batchSize = 2048 + 2048 + 1024; // default: 32
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 1000;
+const batchSize = 1024; // default: 32
 const verbose = 1; // default: 1
 const generateLength = 200;
-const minLoss = 0.001;
+const minLoss = 0.1;
 //
 //
 //
 
-data.init('./datasets/code.txt');
+data.init('./datasets/data2.txt');
 const inputVector = data.getDataSetVectorInt();
 //const inputVector = data.getDataWords();
 const symbolTableLength = data.getSymbolTable().length;
@@ -45,19 +46,21 @@ if (startNetwork) {
     lstm.setData(inputVector);
 
     if (startTraining) {
+        web.started = true;
+
         let startTime = Date.now();
         lstm.train(epochsCount, batchSize, verbose,
 
             (epoch, logs, model) => {
-                let stop = false;
                 //logs.loss > lastLoss ? counter++ : counter--;
                 counter < 0 ? counter = 0 : null;
                 lastLoss = logs.loss;
                 lossHistory.length >= lossHistoryLength ? lossHistory.shift() : 0;
                 lossHistory.push(logs.loss);
-                Number(logs.loss) < minLoss || counter > 3 ? stop = true : 0;
+                Number(logs.loss) < minLoss || counter > 3 ? web.started = false : 0;
                 //if (lossHistory.length === lossHistoryLength) Math.max.apply(null, lossHistory) - Math.min.apply(null, lossHistory) < 0.02 ? stop = true : 0;
-                if (stop) {
+                saveLog(logs);
+                if (!web.started) {
                     console.log('Stopped training by loss.');
                     model.stopTraining = true;
                 }
@@ -91,4 +94,12 @@ if (startNetwork) {
             console.log('Времена предсказаний: ', predictArr);
         });
     }
+}
+
+function saveLog(log) {
+    let jlog = JSON.stringify(log);
+    let data = fs.readFileSync("log.txt", "utf8");
+    fs.writeFile("log.txt", data + jlog + '\n', function(error){
+        if(error) throw error;
+    });
 }

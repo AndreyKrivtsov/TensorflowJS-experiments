@@ -1,0 +1,100 @@
+const sequenceLength = 30;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 1000;
+const batchSize = 1024; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 1000 / 1000 acc=0.673 loss=1.10
+5144ms / 92 min
+
+ы
+
+
+
+—
+—
+
+
+
+
+ава,  уе ото — стассгоребел клн п пор чы ,и тх томомомуеглоннааси  нерриан зоутась   сс   мылной белаини,  твшдося скааан иао знали  себдаесбелввсмото деб п  ееашдымм гоггггм рр виииам
+ со
+
+
+
+
+const sequenceLength = 30;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 300;
+const batchSize = 512; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 300/300 acc=0.385 loss=2.11
+8915ms / 47 min
+
+
+
+const sequenceLength = 30;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 300;
+const batchSize = 256; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 300/300 acc=0.527 loss=1.61
+? / 92 min
+
+Генерация текста...
+— сссу ах   рбласеголоноу пассакал беммиона, ктолне себо под но кал ссатартиау саккаал нороманри тачвеииватила.  оенем мастарии,..
+Время генерации:  1
+
+
+
+
+const sequenceLength = 30;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 300;
+const batchSize = 64; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 300/300 acc=0.773 loss=0.749
+67505ms / 349 min
+
+у тана,а оноцеи ки ето сготн вулизк ви палильь..
+— вна то пооозоровори, не неещером д дретестетынави енемти, уро присгы беренонисп, яерезат н увеязнумь.
+— секв стуте, , меуео зкаатлеси мди, .ереут
+
+
+
+
+const sequenceLength = 30;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 500;
+const batchSize = 512; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 500/500 acc=0.620 loss=1.28
+9018ms / 80 min
+
+— — тадонюю — иа оакэерывстил нелтиаи геревноааа. и ои а  з зоикииепо пет вааиаря и ея езезтиаиися равоаваа  с  ныоный ранн на тарами  нллва.ит ми ,а нерммнн.
+
+— назплллл    деныы наррирмя, зриктул

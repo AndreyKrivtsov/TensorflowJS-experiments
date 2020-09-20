@@ -8,6 +8,7 @@ let Lstm = {
     xData: null,
     yData: null,
     model: tf.sequential(),
+    log: [],
 
     // ИНИЦИАЛИЗАЦИЯ СЕТИ И СЛОЕВ
     create(layers, sequenceLength, symbolTableLength, wordLength, learningRate) {
@@ -105,6 +106,7 @@ let Lstm = {
                     //console.log('Batch ', batchSize);
                 },
                 onEpochEnd: async (epoch, logs) => {
+                    this.setLog(epoch, logs)
                     onEpochEnd(epoch, logs, this.model);
                 },
                 onTrainEnd: async () => {
@@ -120,6 +122,14 @@ let Lstm = {
         return prediction.dataSync();
     },
 
+    getLog() {
+        return this.log
+    },
+
+    setLog(epoch, logs) {
+        logs.epoch = epoch
+        this.log.push(logs)
+    },
 };
 
 exports = module.exports = Lstm;
