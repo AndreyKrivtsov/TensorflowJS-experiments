@@ -1,6 +1,8 @@
 # Ignore the node_modules directory
 node_modules/
 
+log.txt
+
 # Ignore Logs
 logs
 *.log
