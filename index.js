@@ -4,15 +4,15 @@ const lstm = require('./lstm.js');
 const fs = require("fs");
 
 const startNetwork = true;
-const startTraining = true;
-const startServer = true;
+const startTraining = false;
+const startServer = false;
 
 if (startServer) web.run();
 
 //
 // НАСТРОЙКИ
 //
-const sequenceLength = 20;
+const sequenceLength = 5;
 const layers = [128,128];
 const wordLength = 1;
 const learningRate = 0.01; // loss<3=>0.005 loss<2=>0.003 loss<1=>0.002 loss<0.5=>0.001 // default: 0.001
@@ -26,7 +26,7 @@ const minLoss = 0.01;
 //
 
 const data = new TextData(fs)
-data.init('./datasets/datalong.txt');
+data.init('./datasets/datatest.txt');
 
 if (startNetwork) {
 

@@ -41,6 +41,8 @@ let Lstm = {
 
     // ОБРАБОТКА ДАТА СЕТА
     setData(inputVector) {
+        console.log(inputVector)
+
         let dataSets = [];
         let dataLabels = [];
 
