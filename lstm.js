@@ -24,7 +24,7 @@ let Lstm = {
                         inputShape: [sequenceLength, wordLength]
                     }));
 
-                this.model.add(tf.layers.dropout({ rate: 0.2 }));
+                //this.model.add(tf.layers.dropout({ rate: 0.2, noiseShape : [3] }));
             }
             else {
                 if (i !== layers.length-1 ) this.model.add(tf.layers.lstm({ units: layers[i], returnSequences: true }));

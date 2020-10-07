@@ -1,3 +1,85 @@
+const sequenceLength = 20;
+const layers = [128,128];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.02; // 20e=>0.01 <3=>0.005 <1.5=>0.003 <1=>0.002 <0.5=>0.001 // default: 0.001
+const epochsCount = 500;
+const batchSize = 1024; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 251 / 500 acc=0.995 loss=0.102
+12667ms / 52 min
+
+> datalong.txt
+бай пр сезазтм рнно огоетуинари, бтовиьь я скатлеагы батель са хоекрбаоми, — тел, пто ска нокнн,ю — от ети агсй та. дарми и рмионеп
+ало всеехррочкхотьмо выоак… — этонущнь, р стасиул я ц спроселася см
+
+
+
+const sequenceLength = 20;
+const layers = [32,32];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.005; // default: 0.001
+const epochsCount = 3000;
+const batchSize = 2048; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 1649 / 3000 acc=0.802 loss=0.693
+1701ms / 53 min
+
+
+
+const sequenceLength = 20;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.002; // default: 0.001
+const epochsCount = 1000;
+const batchSize = 1024; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 1000 / 1000 acc=0.935 loss=0.243
+3752ms / 67 min
+
+налозьь… во чтт най  мабас я я  пиасл захх п сллчке мойнон к тклщтм петентид налтионай ухоха, не мил аиарыу,о и тежуоо прин чолоу с,  оить ко жожныыеп тапое ил пола теомебть р зжаизввс
+ссэет тертию,у в
+
+
+
+const sequenceLength = 20;
+const layers = [64,64];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 1000;
+const batchSize = 1024; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 1000 / 1000 acc=0.682 loss=1.10
+3727ms / 71 min
+
+
+
+const sequenceLength = 20;
+const layers = [64,64,32,32];
+const wordLength = 1; //data.getMaxWordLength();
+const learningRate = 0.001; // default: 0.001
+const epochsCount = 1000;
+const batchSize = 1024; // default: 32
+const verbose = 1; // default: 1
+const generateLength = 200;
+const minLoss = 0.1;
+
+Epoch 1000 / 1000 acc=0.319 loss=2.41
+6815ms / 116 min
+
+
+
 const sequenceLength = 30;
 const layers = [64,64];
 const wordLength = 1; //data.getMaxWordLength();
@@ -10,20 +92,6 @@ const minLoss = 0.1;
 
 Epoch 1000 / 1000 acc=0.673 loss=1.10
 5144ms / 92 min
-
-ы
-
-
-
-—
-—
-
-
-
-
-ава,  уе ото — стассгоребел клн п пор чы ,и тх томомомуеглоннааси  нерриан зоутась   сс   мылной белаини,  твшдося скааан иао знали  себдаесбелввсмото деб п  ееашдымм гоггггм рр виииам
- со
-
 
 
 
@@ -61,7 +129,6 @@ Epoch 300/300 acc=0.527 loss=1.61
 
 
 
-
 const sequenceLength = 30;
 const layers = [64,64];
 const wordLength = 1; //data.getMaxWordLength();
@@ -78,7 +145,6 @@ Epoch 300/300 acc=0.773 loss=0.749
 у тана,а оноцеи ки ето сготн вулизк ви палильь..
 — вна то пооозоровори, не неещером д дретестетынави енемти, уро присгы беренонисп, яерезат н увеязнумь.
 — секв стуте, , меуео зкаатлеси мди, .ереут
-
 
 
 

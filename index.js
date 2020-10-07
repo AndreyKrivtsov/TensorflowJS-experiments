@@ -1,5 +1,5 @@
 const web = require('./web.js');
-const data = require('./data.js');
+const TextData = require('./data.js');
 const lstm = require('./lstm.js');
 const fs = require("fs");
 
@@ -13,37 +13,25 @@ if (startServer) web.run();
 // НАСТРОЙКИ
 //
 const sequenceLength = 20;
-const layers = [64,64,32,32];
-const wordLength = 1; //data.getMaxWordLength();
-const learningRate = 0.001; // default: 0.001
-const epochsCount = 1000;
+const layers = [128,128];
+const wordLength = 1;
+const learningRate = 0.01; // loss<3=>0.005 loss<2=>0.003 loss<1=>0.002 loss<0.5=>0.001 // default: 0.001
+const epochsCount = 800;
 const batchSize = 1024; // default: 32
 const verbose = 1; // default: 1
 const generateLength = 200;
-const minLoss = 0.1;
+const minLoss = 0.01;
 //
 //
 //
 
-data.init('./datasets/data2.txt');
-const inputVector = data.getDataSetVectorInt();
-//const inputVector = data.getDataWords();
-const symbolTableLength = data.getSymbolTable().length;
-
-//console.log('Макс длина слова: ', data.getMaxWordLength());
-//console.log(data.getDataWords());
-console.log('Длина таблицы символов : ', symbolTableLength);
-console.log('Длина тренировочного вектора : ', inputVector.length);
-//console.log('Тренировочного вектор : ', inputVector);
+const data = new TextData(fs)
+data.init('./datasets/datalong.txt');
 
 if (startNetwork) {
-    let lastLoss = 100;
-    let counter = 0;
-    let lossHistory = [];
-    let lossHistoryLength = 100;
 
-    lstm.create(layers, sequenceLength, symbolTableLength, wordLength, learningRate);
-    lstm.setData(inputVector);
+    lstm.create(layers, sequenceLength, data.dictLength, wordLength, learningRate);
+    lstm.setData(data.sequence);
 
     if (startTraining) {
         web.started = true;
@@ -52,14 +40,24 @@ if (startNetwork) {
         lstm.train(epochsCount, batchSize, verbose,
 
             (epoch, logs, model) => {
-                //logs.loss > lastLoss ? counter++ : counter--;
-                counter < 0 ? counter = 0 : null;
-                lastLoss = logs.loss;
-                lossHistory.length >= lossHistoryLength ? lossHistory.shift() : 0;
-                lossHistory.push(logs.loss);
-                Number(logs.loss) < minLoss || counter > 3 ? web.started = false : 0;
-                //if (lossHistory.length === lossHistoryLength) Math.max.apply(null, lossHistory) - Math.min.apply(null, lossHistory) < 0.02 ? stop = true : 0;
+                if (logs.loss < 3) {
+                    model.optimizer.learningRate = 0.005;
+                }
+
+                if (logs.loss < 2) {
+                    model.optimizer.learningRate = 0.003;
+                }
+
+                if (logs.loss < 1) {
+                    model.optimizer.learningRate = 0.002;
+                }
+
+                if (logs.loss < 0.5) {
+                    model.optimizer.learningRate = 0.001;
+                }
+
                 saveLog(logs);
+
                 if (!web.started) {
                     console.log('Stopped training by loss.');
                     model.stopTraining = true;
@@ -79,14 +77,13 @@ if (startNetwork) {
                 let startPredict = Date.now();
                 let prediction = lstm.predict(output);
                 let endPredict = Date.now();
-                predictArr.push(endPredict - startPredict);
                 let index = data.max(prediction);
                 for (let j = 0; j < output.length-1; j++) {
                     output[j][0] = output[j+1][0];
                 }
                 output[output.length-1][0] = index / symbolTableLength;
                 process.stdout.write((data.intToChar(index)).toString());
-                //str += data.intToChar(index);
+                predictArr.push(endPredict - startPredict);
             }
             process.stdout.write('\n');
             let endGen = Date.now();

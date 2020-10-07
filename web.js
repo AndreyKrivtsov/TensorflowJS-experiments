@@ -19,8 +19,9 @@ let Web = {
             res.send('started ' + this.started)
         });
 
-        var port = process.env.PORT || 3000;
-        web.listen(port, function () {
+        let port = process.env.PORT || 4000;
+        let hostname = '127.0.0.1';
+        web.listen(port, hostname, function () {
             console.log('listening web server');
         });
     }

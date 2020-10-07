@@ -1,141 +1,59 @@
-let fs = require('fs');
+class TextData {
+    constructor(fs) {
+      this.fs = fs
+      this.dictLength = 0
+      this.charToIdx = {}
+      this.idxToChar = {}
+      this.sequence = []
+    }
 
-let Data = {
-    dataSetRaw: null,
+    init(file) {
+        let text = this.readFile(file);
+        [this.sequence, this.charToIdx, this.idxToChar] = this.getSequence(text);
+    }
 
-    // private
-    dataSetVector: [],
-    dataSetVectorInt: [],
-    symbolTable: [],
-    words: [],
+    readFile(file) {
+        let text = this.fs.readFileSync(file, 'utf8',)
+        return text.toLowerCase();
+    }
 
-    maxWordLength: 0,
+    getSequence(text) {
+        let chars = text.split('');
+        let dict = []
 
-    init(dataSetFile) {
-        this.dataSetRaw = this.readFile(dataSetFile);
-        this.dataSetRaw = this.format();
-        //this.symbolTable = this.getSymbolTable();
-    },
-
-    readFile(fileName) {
-        return fs.readFileSync(fileName, 'utf8',);
-    },
-
-    getSymbolTable() {
-        if (!this.symbolTable.length) {
-            for (let symbol of this.getDataSetVector()) {
-                if (this.symbolTable.indexOf(symbol) === -1) {
-                    this.symbolTable.push(symbol);
-                }
+        for (let char of chars) {
+            if (dict.indexOf(char) === -1) {
+                dict.push(char);
             }
         }
-        return this.symbolTable;
-    },
 
-    getDataSetVector() {
-        if (!this.dataSetVector.length) {
-            for (let i = 0; i < this.dataSetRaw.length; i++) {
-                this.dataSetVector.push(this.dataSetRaw.charAt(i));
-            }
-        }
-        return this.dataSetVector;
-    },
+        this.dictLength = dict.length;
 
-    getDataSetVectorInt() {
-        if (!this.dataSetVectorInt.length) {
-            for (let i = 0; i < this.getDataSetVector().length; i++) {
-                this.dataSetVectorInt.push(this.charToInt(this.getDataSetVector()[i]));
-            }
-        }
-        return this.dataSetVectorInt;
-    },
+        let charToIdx = {}
+        dict.forEach((char, i) => {
+            charToIdx[char] = i;
+        })
+        
+        let idxToChar = {}
+        dict.forEach((char, i) => {
+            idxToChar[i] = char;
+        })
 
-    getDataWords() {
-        if (!this.words.length) {
-            let wordIterator = 0;
-            let word = '';
-            for (let i = 0; i < this.dataSetRaw.length; i++) {
-                if (!this.isReturn(this.dataSetRaw.charAt(i))) {
-                    if (this.dataSetRaw.charAt(i) === ' ') {
-                        this.words[wordIterator] = [];
-                        for (let j = 0; j < this.getMaxWordLength(); j++) {
-                            if (j < word.length) { this.words[wordIterator].push(this.charToInt(word.charAt(j))) }
-                            else { this.words[wordIterator].push(0) }
-                        }
-                        wordIterator++;
-                        word = '';
-                    }
-                    else {
-                        word += this.dataSetRaw.charAt(i);
-                    }
-                }
-            }
-        }
-        return this.words;
-    },
+        let sequence = []
+        chars.forEach((char, i) => {
+            sequence.push(charToIdx[char])
+        })
 
-    getMaxWordLength() {
-        if (!this.maxWordLength) {
-            let wordIterator = 0;
-            let maxLength = 0;
-            let word = '';
-            for (let i = 0; i < this.dataSetRaw.length; i++) {
-                //if (!this.isReturn(this.dataSetRaw.charAt(i))) {
-                    if (this.dataSetRaw.charAt(i) === ' ') {
-                        maxLength < word.length ? maxLength = word.length : null
-                        wordIterator++;
-                        word = '';
-                    }
-                    else {
-                        word += this.dataSetRaw.charAt(i);
-                    }
-                //}
-            }
-            this.maxWordLength = maxLength;
-        }
-        return this.maxWordLength;
-    },
+        return [sequence, charToIdx, idxToChar];
+    }
 
     isReturn(char) {
         let ret = ['\r', '\n', '\\', 'r',  '\\', 'n', '-', ':'];
         for (let i = 0; i < ret.length; i++) {
-            if (char === ret[i]) return true;
+            if (char === ret[i]) return true
         }
-        return false;
-    },
+        return false
+    }
+}
 
-    charToInt(char) {
-        for (let i = 0; i < this.getSymbolTable().length; i++) {
-            if (char === this.getSymbolTable()[i]) {
-                return i;
-            }
-        }
-
-        return '';
-    },
-
-    intToChar(charCode) {
-        if (this.getSymbolTable()[charCode]){
-            return this.getSymbolTable()[charCode];
-        }
-        return '';
-    },
-
-    max(vector) {
-        let max = 0;
-        let index = null;
-        for (let i = 0; i < vector.length; i++) {
-            if (vector[i] > max) {
-                max = vector[i];
-                index = i;
-            }
-        }
-        return index;
-    },
-
-    format() {
-        return this.dataSetRaw.toLowerCase();
-    },
-};
-
-exports = module.exports = Data;
+exports = module.exports = TextData;
