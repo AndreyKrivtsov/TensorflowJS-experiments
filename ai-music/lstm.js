@@ -41,55 +41,35 @@ let Lstm = {
 
     // ОБРАБОТКА ДАТА СЕТА
     setData(inputVector) {
-        console.log(inputVector)
-
         let dataSets = [];
         let dataLabels = [];
 
-        for (let i = 0; i < inputVector.length - this.sequenceLength; i++) {
-            dataSets[i] = [];
-            dataLabels[i] = [];
-            for (let j = i; j < this.sequenceLength+i; j++) {
-                if (inputVector[j].length > 1) {
-                    let buff = [];
-                    for (let k = 0; k < inputVector[j].length; k++) {
-                        buff.push(inputVector[j][k] / this.symbolTableLength);
-                    }
-                    dataSets[i].push([buff]);
-                }
-                else dataSets[i].push([inputVector[j] / this.symbolTableLength]);
-            }
-            for (let k = 0; k < this.symbolTableLength; k++) {
-                dataLabels[i].push(0);
-            }
-            dataLabels[i][inputVector[this.sequenceLength + i]] = 1;
-        }
+        inputVector.forEach((c, i, arr) => {
+            if (i + this.sequenceLength < arr.length) {
+                let set = arr.slice(i, i + this.sequenceLength)
+                    .map(item => [item / (this.symbolTableLength - 1)])
+                dataSets.push(set)
 
-        //console.log('Кол-во семплов: ', dataSets.length);
-        //console.log('Кол-во меток: ', dataLabels.length);
+                let labelIndex = arr[i + this.sequenceLength]
+                let label = new Array(this.symbolTableLength)
+                    .fill(0, 0, this.symbolTableLength)
+                    .map((elem, index) => Number(index === labelIndex))
+
+                dataLabels.push(label)
+            }
+        })
 
         //console.log('Семплы: ', dataSets);
-        //console.log('Метки: ', dataLabels);
+        //console.log('Метки: ', dataLabels[0]);
 
-        let xbuf = [];
-        let ybuf = [];
-
-        for (let i = 0; i < dataSets.length; i++) {
-            xbuf.push(dataSets[i]);
-            ybuf.push(dataLabels[i]);
-        }
-
-        //console.log('X: ', xbuf);
-        //console.log('Y: ', ybuf);
-
-        this.xData = tf.tensor3d(xbuf);
-        this.yData = tf.tensor2d(ybuf);
+        this.xData = tf.tensor3d(dataSets);
+        this.yData = tf.tensor2d(dataLabels);
     },
 
     // ПОЛУЧЕНИЯ РАНДОМНОГО ПЕРВОГО ВХОДА
     randomData() {
         let randomData = [];
-        for (let i = 0; i < this.sequenceLength-1; i++) {
+        for (let i = 0; i < this.sequenceLength; i++) {
             randomData[i] = [0];
         }
         randomData[this.sequenceLength-1] = [1];

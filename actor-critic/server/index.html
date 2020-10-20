@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>The Coolest Vue - Axios Demo</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .cell {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            background-color: #AAA;
+            margin: 1px;
+        }
+
+        .actor {
+            background-color: #333;
+        }
+
+        .eat {
+            background-color: rgb(30, 177, 30);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+
+        var socket = io();
+
+        const App = {
+
+            template: `
+                <div>
+                    <div v-for="y in rows" class="row">
+                        <div 
+                            v-for="x in cols" 
+                            class="cell" 
+                            :class="{
+                                'actor': x-1 === actor.x && y-1 === actor.y,
+                                'eat': x-1 === eat.x && y-1 === eat.y
+                            }"
+                        ></div>
+                    </div>
+                </div>`,
+
+            data() {
+                return {
+                    rows: 5,
+                    cols: 5,
+                    actor: { x: 0, y: 0 },
+                    eat: { x: 4, y: 4 }
+                };
+            },
+            computed: {
+                urls() {
+                    //return this.$root.apiurls;
+                },
+            },
+            mounted() {
+                socket.on('config', (config) => {
+                    this.rows = config.size
+                    this.cols = config.size
+                    this.actor = config.actor
+                    this.eat = config.eat
+
+                    socket.emit('getstate');
+                })
+
+                socket.on('state', (state) => {
+                    this.actor = state.actor
+                })
+
+                socket.emit('getconfig');
+            },
+            methods: {
+            },
+        };
+
+        const app = Vue.createApp(App)
+        const vm = app.mount('#app')
+
+    </script>
+</body>
+
+</html>

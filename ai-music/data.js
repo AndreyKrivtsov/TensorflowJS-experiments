@@ -13,7 +13,7 @@ class TextData {
     }
 
     readFile(file) {
-        let text = this.fs.readFileSync(file, 'utf8',)
+        let text = this.fs.readFileSync(file, 'utf8')
         return text.toLowerCase();
     }
 
@@ -33,7 +33,7 @@ class TextData {
         dict.forEach((char, i) => {
             charToIdx[char] = i;
         })
-        
+
         let idxToChar = {}
         dict.forEach((char, i) => {
             idxToChar[i] = char;
@@ -53,6 +53,13 @@ class TextData {
             if (char === ret[i]) return true
         }
         return false
+    }
+
+    maxIndex(array) {
+        let max = 0
+        let index = 0
+        array.forEach((int, ind) => (int < max) || (max = int, index = ind))
+        return index
     }
 }
 
